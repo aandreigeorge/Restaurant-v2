@@ -23,7 +23,7 @@ public class MenuOrder {
                     input = scanner.nextLine();
                     Burger burger = createBurger(input);
                     if (burger == null) {
-                        System.out.println("Start over and select only from the available options");
+                        System.out.println("Please start over and select only from the available options");
                         printMenu();
                         input = scanner.nextLine();
                         break;
@@ -61,7 +61,13 @@ public class MenuOrder {
                 case "3" -> {
                     printDrinksMenu();
                     input = scanner.nextLine();
-                    Drink drink = new Drink(input);
+                    Drink drink = createDrink(input);
+                    if(drink == null) {
+                        System.out.println("Please start over and select only from the available options");
+                        printMenu();
+                        input = scanner.nextLine();
+                        break;
+                    }
                     System.out.println("Please select your drink size. SMALL/REGULAR/LARGE");
                     input = scanner.nextLine();
                     drink.setSize(input);
@@ -167,12 +173,22 @@ public class MenuOrder {
         return null;
     }
 
+    private Drink createDrink(String input) {
+        input = input.toUpperCase();
+        if(Menu.getDrinks().containsKey(input)) {
+            return new Drink(input, Menu.getDrinks().get(input));
+        }
+        return null;
+    }
+
     //NullPointerException from createToppingList
     // if we create a topping that was not defined in the Menu(call) ToppingsMap(member)
     private String[] createToppingList(String input) {
         input = input.toUpperCase();
         return input.split(" ");
     }
+
+
 
 //    private static List<Topping> createToppingList(String input) {
 //
