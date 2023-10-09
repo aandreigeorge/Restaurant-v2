@@ -33,7 +33,11 @@ public abstract class MenuItem {
     }
 
     public void setSize(String size) {
-        this.size = size.toUpperCase();
+        if ((size.equalsIgnoreCase("SMALL")) || (size.equalsIgnoreCase("REGULAR")) || (size.equalsIgnoreCase("LARGE"))) {
+            this.size = size.toUpperCase();
+        } else {
+            System.out.println("This size option is not valid. We added by default a " + getName());
+        }
     }
 
     public static void printMenuItem(String name, double price) {

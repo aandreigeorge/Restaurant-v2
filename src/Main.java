@@ -6,6 +6,6 @@ public class Main {
         MenuOrder order = new MenuOrder();
         order.runRestaurant();
 
-
     }
 }
+
