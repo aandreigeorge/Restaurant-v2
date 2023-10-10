@@ -37,9 +37,9 @@ public class MenuOrder {
 
                     System.out.println("Do you want to add toppings to your burger? YES/NO");
                     if (scanner.nextLine().toUpperCase().contains("Y")) {
-                        printToppingsMenu();
+                        printToppingsMenu(burger);
                         input = scanner.nextLine();
-                        String[] toppingsList = createAndValidateToppings(input);
+                        String[] toppingsList = createAndValidateToppings(input, burger);
 
                         if (toppingsList == null) {
                             printMenu();
@@ -53,7 +53,7 @@ public class MenuOrder {
                             break;
                         } else {
                             for (String topping : toppingsList) {
-                                burger.addTopping(topping);
+                                burger.addTopping(topping, burger);
                             }
                         }
                     }
@@ -143,8 +143,8 @@ public class MenuOrder {
         }
     }
 
-    private static void printToppingsMenu() {
-        Map<String, Double> toppings = Menu.getToppings();
+    private static void printToppingsMenu(Burger burgerType) {
+        Map<String, Double> toppings = Menu.getToppings(burgerType);
         System.out.println("""
                         Please choose from the following toppings:
                         (a maximum of 3 toppings are allowed on each burger)
@@ -162,6 +162,13 @@ public class MenuOrder {
         }
     }
 
+    private void printOrderBreakdown() {
+        for (MenuItem item : order) {
+            item.printMenuItem();
+        }
+        System.out.println();
+    }
+
     private void printTotalOrderPrice() {
         double totalPrice = 0.0;
         for (MenuItem item : order) {
@@ -169,14 +176,6 @@ public class MenuOrder {
             totalPrice += price;
         }
         System.out.println("TOTAL: " + totalPrice);
-        System.out.println();
-
-    }
-
-    private void printOrderBreakdown() {
-        for (MenuItem item : order) {
-            item.printMenuItem();
-        }
         System.out.println();
     }
 
@@ -196,11 +195,11 @@ public class MenuOrder {
         return null;
     }
 
-    private String[] createAndValidateToppings(String input) {
+    private String[] createAndValidateToppings(String input, Burger burgerType) {
         input = input.toUpperCase();
         String[] toppings = input.split(" ");
         for (String topping : toppings) {
-            if (!Menu.getToppings().containsKey(topping)) {
+            if (!Menu.getToppings(burgerType).containsKey(topping)) {
                 System.out.println("We do not have a " + topping + " topping. Please start over");
                 return null;
             }

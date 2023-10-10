@@ -26,21 +26,21 @@ public class Burger extends MenuItem {
         return price;
     }
 
-    public void addTopping(String input) {
-        if (this.burgerToppings.size() < 3 && !this.burgerToppings.contains(new Topping(input, Menu.getToppings().get(input)))) {
-            this.burgerToppings.add(new Topping(input, Menu.getToppings().get(input)));
-        } else if (this.burgerToppings.contains(new Topping(input, Menu.getToppings().get(input)))) {
+    public void addTopping(String input, Burger burgerType) {
+        if (this.burgerToppings.size() < 3 && !this.burgerToppings.contains(new Topping(input, Menu.getToppings(burgerType).get(input)))) {
+            this.burgerToppings.add(new Topping(input, Menu.getToppings(burgerType).get(input)));
+        } else if (this.burgerToppings.contains(new Topping(input, Menu.getToppings(burgerType).get(input)))) {
             System.out.println("You have already included a " + input.toUpperCase() + " topping");
         } else {
             System.out.println("You can add only " + burgerToppings.size() + " toppings to the " + getName());
         }
     }
 
-    public void removeTopping(String input) {
-        this.burgerToppings.remove(new Topping(input, Menu.getToppings().get(input)));
+    public void removeTopping(String input, Burger burgerType) {
+        this.burgerToppings.remove(new Topping(input, Menu.getToppings(burgerType).get(input)));
     }
 
-    public void printBurgerItems() {
+    private void printBurgerItems() {
         printMenuItem(this.getName(), super.getModifiedPrice());
         for (Topping burgerTopping : burgerToppings) {
             burgerTopping.printMenuItem();
