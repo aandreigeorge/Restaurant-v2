@@ -1,4 +1,9 @@
-package menu;
+package restaurant;
+
+import menu.Burger;
+import menu.Drink;
+import menu.Menu;
+import menu.MenuItem;
 
 import java.util.*;
 
@@ -22,29 +27,35 @@ public class MenuOrder {
                     printBurgerMenu();
                     input = scanner.nextLine();
                     Burger burger = createBurger(input);
+
                     if (burger == null) {
                         System.out.println("Please start over and select only from the available options");
                         printMenu();
                         input = scanner.nextLine();
                         break;
                     }
+
                     System.out.println("Do you want to add toppings to your burger? YES/NO");
                     if (scanner.nextLine().toUpperCase().contains("Y")) {
                         printToppingsMenu();
                         input = scanner.nextLine();
-                        String[] toppingsList = createToppingList(input);
+                        String[] toppingsList = createAndValidateToppings(input);
 
-                        if (toppingsList.length > 3) {
+                        if (toppingsList == null) {
+                            printMenu();
+                            input = scanner.nextLine();
+                            break;
+                        } else if (toppingsList.length > 3) {
                             System.out.println("You can add only 3 toppings to a " + burger.getName() + " .");
                             System.out.println("Please start over!");
                             printMenu();
                             input = scanner.nextLine();
                             break;
+                        } else {
+                            for (String topping : toppingsList) {
+                                burger.addTopping(topping);
+                            }
                         }
-                        for (String topping : toppingsList) {
-                            burger.addTopping(topping);
-                        }
-
                     }
                     order.add(burger);
                     printMenu();
@@ -53,7 +64,6 @@ public class MenuOrder {
 
                 case "2" -> {
                     System.out.println("We're sorry. We currently don't have any side dishes available");
-                    System.out.println();
                     printMenu();
                     input = scanner.nextLine();
                 }
@@ -62,12 +72,13 @@ public class MenuOrder {
                     printDrinksMenu();
                     input = scanner.nextLine();
                     Drink drink = createDrink(input);
-                    if(drink == null) {
+                    if (drink == null) {
                         System.out.println("Please start over and select only from the available options");
                         printMenu();
                         input = scanner.nextLine();
                         break;
                     }
+
                     System.out.println("Please select your drink size. SMALL/REGULAR/LARGE");
                     input = scanner.nextLine();
                     drink.setSize(input);
@@ -94,7 +105,11 @@ public class MenuOrder {
                     input = scanner.nextLine();
                 }
 
-                case "7" -> orderInProgress = false;
+                case "7" -> {
+                    System.out.println("Enjoy your vegan meal then!");
+                    orderInProgress = false;
+                }
+
                 default -> {
                     System.out.println("Invalid option. Please select from 1 - 7");
                     input = scanner.nextLine();
@@ -175,37 +190,21 @@ public class MenuOrder {
 
     private Drink createDrink(String input) {
         input = input.toUpperCase();
-        if(Menu.getDrinks().containsKey(input)) {
+        if (Menu.getDrinks().containsKey(input)) {
             return new Drink(input, Menu.getDrinks().get(input));
         }
         return null;
     }
 
-    //NullPointerException from createToppingList
-    // if we create a topping that was not defined in the Menu(call) ToppingsMap(member)
-    private String[] createToppingList(String input) {
+    private String[] createAndValidateToppings(String input) {
         input = input.toUpperCase();
+        String[] toppings = input.split(" ");
+        for (String topping : toppings) {
+            if (!Menu.getToppings().containsKey(topping)) {
+                System.out.println("We do not have a " + topping + " topping. Please start over");
+                return null;
+            }
+        }
         return input.split(" ");
     }
-
-
-
-//    private static List<Topping> createToppingList(String input) {
-//
-//        input = input.toUpperCase();
-//        String[] toppingArray = input.split(" ");
-//        List<Topping> toppingList = new ArrayList<>();
-//
-//        for (String toppingName : toppingArray) {
-//            if (Menu.getToppings().containsKey(toppingName)) {
-//                toppingList.add(new Topping(toppingName, Menu.getToppings().get(toppingName)));
-//            } else if (!Menu.getToppings().containsKey(toppingName)){
-//                System.out.println("Please choose a valid option");
-//            }
-//            return toppingList;
-//        }
-//        return null;
-//    }
-
-
 }

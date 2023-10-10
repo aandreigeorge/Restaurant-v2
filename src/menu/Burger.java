@@ -26,7 +26,6 @@ public class Burger extends MenuItem {
         return price;
     }
 
-
     public void addTopping(String input) {
         if (this.burgerToppings.size() < 3 && !this.burgerToppings.contains(new Topping(input, Menu.getToppings().get(input)))) {
             this.burgerToppings.add(new Topping(input, Menu.getToppings().get(input)));
