@@ -3,6 +3,7 @@ package menu;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class Burger extends MenuItem {
 
     private final List<Topping> burgerToppings = new ArrayList<>(3);

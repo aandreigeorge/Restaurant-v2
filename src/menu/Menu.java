@@ -3,6 +3,7 @@ package menu;
 import java.util.HashMap;
 import java.util.Map;
 
+
 public class Menu {
 
     private static final Map<String, Double> burgers = new HashMap<>();

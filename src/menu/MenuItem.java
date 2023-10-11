@@ -1,5 +1,6 @@
 package menu;
 
+
 public abstract class MenuItem {
 
     private final String type;
